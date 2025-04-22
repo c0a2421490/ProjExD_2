@@ -14,11 +14,25 @@ DELTA = {
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
+def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
+    """
+    引数:こうかとんRectまたは爆弾Rect
+    戻り値:判定結果タプル(横, 縦)
+    画面内ならTrue, 画面外ならFalse
+    """
+    yoko, tate = True, True
+    if rct.left < 0 or WIDTH < rct.right: # 横方向判定
+        yoko = False
+    if rct.top < 0 or HEIGHT < rct.bottom: # 縦方向判定
+        tate = False
+    return yoko, tate
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("fig/pg_bg.jpg")
-    #こうかとん初期化
+    # こうかとん初期化
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 300, 200
@@ -35,11 +49,13 @@ def main():
     clock = pg.time.Clock()
     tmr = 0
     while True:
+        # 背景
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
         screen.blit(bg_img, [0, 0]) 
 
+        # こうかとん&爆弾
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
         for key , mv in DELTA.items():
@@ -47,10 +63,17 @@ def main():
                 sum_mv[0]  += mv[0]  #上下方向
                 sum_mv[1]  += mv[1] #左右方向
         kk_rct.move_ip(sum_mv)
+        if check_bound(kk_rct) != (True, True): # 画面外なら
+            kk_rct.move_ip(-sum_mv[0],-sum_mv[1]) # 画面内にもどす
         bb_rct.move_ip(vx, vy)
-
+        yoko, tate = check_bound(bb_rct)
+        if not yoko: #左右どちらかはみでていたら
+            vx *= -1
+        if not tate: #上下どちらかはみでていたら
+            vy *= -1
         screen.blit(kk_img, kk_rct)
         screen.blit(bb_img, bb_rct)
+
         pg.display.update()
         tmr += 1
         clock.tick(50)
