@@ -49,15 +49,15 @@ def gameover(screen: pg.Surface) -> None:
     txt_rect =txt.get_rect(center=(WIDTH/2, HEIGHT/2))
     screen.blit(txt, txt_rect)
     # こうかとん
-    kk8_img = pg.image.load("fig/8.png")
-    kk8_rct = kk8_img.get_rect()
-    kk8_rct.center = (WIDTH/2)-200, HEIGHT/2
-    screen.blit(kk8_img, kk8_rct)
+    kk81_img = pg.image.load("fig/8.png")
+    kk81_rct = kk81_img.get_rect()
+    kk81_rct.center = (WIDTH/2)-200, HEIGHT/2
+    screen.blit(kk81_img, kk81_rct)
 
-    kk9_img = pg.image.load("fig/8.png")
-    kk9_rct = kk9_img.get_rect()
-    kk9_rct.center = (WIDTH/2)+200, HEIGHT/2
-    screen.blit(kk9_img, kk9_rct)
+    kk82_img = pg.image.load("fig/8.png")
+    kk82_rct = kk82_img.get_rect()
+    kk82_rct.center = (WIDTH/2)+200, HEIGHT/2
+    screen.blit(kk82_img, kk82_rct)
 
     pg.display.update()
     time.sleep(5)
