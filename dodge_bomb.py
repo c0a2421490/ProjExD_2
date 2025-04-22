@@ -63,6 +63,24 @@ def gameover(screen: pg.Surface) -> None:
     time.sleep(5)
 
 
+def kakukaso(tmr) -> tuple[bool, bool]:
+    """
+    引数:時間
+    戻り値:爆弾の大きさと加速度のタプル
+    10段階の大きさ、加速度
+    """
+    # 爆弾移動速度
+    vx = 5
+    vy = 5
+    # 加速度のリスト
+    bb_accs = [a for a in range(1, 11)]
+    # 拡大爆弾Surfaceのリスト
+    for r in range(1, 11):
+        bb_img = pg.Surface((20*r, 20*r))
+        pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
+    # 
+    avx = vx*bb_accs[min(tmr//500, 9)]
+    bb_img = bb_imgs[min(tmr//500, 9)]
 
 
 def main():
