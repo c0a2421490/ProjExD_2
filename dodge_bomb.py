@@ -1,6 +1,7 @@
 import os
 import random
 import sys
+import time
 import pygame as pg
 
 
@@ -26,6 +27,42 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     if rct.top < 0 or HEIGHT < rct.bottom: # 縦方向判定
         tate = False
     return yoko, tate
+
+
+def gameover(screen: pg.Surface) -> None:
+    """
+    引数:screen
+    画面をブラックアウト,泣いているこうかとん画像と「Game Over」の文字列を5秒間表示
+    """
+    # ブラックアウト
+    screen = pg.display.set_mode((WIDTH, HEIGHT))
+    bg_img = pg.image.load("fig/pg_bg.jpg")
+    screen.blit(bg_img,[0, 0])
+    gg_img = pg.Surface((WIDTH, HEIGHT))
+    pg.draw.rect(gg_img, (0, 0, 0), (0, 0, WIDTH, HEIGHT))
+    gg_img.set_alpha(200)
+    gg_rect = gg_img.get_rect()
+    screen.blit(gg_img, gg_rect)
+    # テキスト
+    fonto = pg.font.Font(None, 80)
+    txt = fonto.render("Game Over",True, (255, 255, 255))
+    txt_rect =txt.get_rect(center=(WIDTH/2, HEIGHT/2))
+    screen.blit(txt, txt_rect)
+    # こうかとん
+    kk8_img = pg.image.load("fig/8.png")
+    kk8_rct = kk8_img.get_rect()
+    kk8_rct.center = (WIDTH/2)-200, HEIGHT/2
+    screen.blit(kk8_img, kk8_rct)
+
+    kk9_img = pg.image.load("fig/8.png")
+    kk9_rct = kk9_img.get_rect()
+    kk9_rct.center = (WIDTH/2)+200, HEIGHT/2
+    screen.blit(kk9_img, kk9_rct)
+
+    pg.display.update()
+    time.sleep(5)
+
+
 
 
 def main():
@@ -57,7 +94,7 @@ def main():
 
         # こうかとん爆弾が衝突時
         if kk_rct.colliderect(bb_rct):
-            return
+            gameover(screen)
 
         # こうかとん&爆弾
         key_lst = pg.key.get_pressed()
